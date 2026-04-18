@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fragrance Curation</title>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css" />
+    <style>
+        :root {
+            --bg-color: #fcfbf9;
+            --text-main: #2d2d2d;
+            --text-muted: #757575;
+            --accent: #b09e86;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Pretendard', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        header {
+            text-align: center;
+            padding: 80px 20px 40px;
+            background: linear-gradient(rgba(252, 251, 249, 0.9), rgba(252, 251, 249, 0.9)), 
+                        url('https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&q=80&w=2000') center/cover;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 40px;
+            font-weight: 500;
+        }
+
+        /* 향수 그리드 디자인 */
+        .perfume-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 80px;
+        }
+
+        .perfume-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .perfume-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        }
+
+        .perfume-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .perfume-info {
+            padding: 24px;
+        }
+
+        .perfume-brand {
+            font-size: 0.85rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .perfume-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .perfume-notes {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+        }
+
+        .perfume-mood {
+            display: inline-block;
+            background: #f0ebe1;
+            color: #6d604a;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        /* 감정 큐레이션 버튼 영역 */
+        .emotion-section {
+            text-align: center;
+            background: #ffffff;
+            padding: 60px 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.02);
+        }
+
+        .emotion-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .emotion-btn {
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--text-main);
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .emotion-btn:hover, .emotion-btn.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        /* 결과 표시 영역 */
+        #result-area {
+            display: none;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 30px;
+            background: #f9f8f6;
+            border-radius: 12px;
+            border-left: 4px solid var(--accent);
+            text-align: left;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 15px;
+        }
+
+        .result-desc {
+            font-size: 1.05rem;
+            color: var(--text-main);
+            line-height: 1.7;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Scent & Emotion</h1>
+        <p class="subtitle">당신의 감정과 상황에 맞춘 향기 큐레이션</p>
+    </header>
+
+    <div class="container">
+        <h2 class="section-title">Signature Selections</h2>
+        <div class="perfume-grid">
+            <div class="perfume-card">
+                <img src="https://images.unsplash.com/photo-1585386959984-a4155224a1ad?auto=format&fit=crop&q=80&w=600" alt="Byredo Blanche" class="perfume-image">
+                <div class="perfume-info">
+                    <div class="perfume-brand">Byredo</div>
+                    <div class="perfume-name">블랑쉬 (Blanche)</div>
+                    <div class="perfume-notes">알데하이드, 화이트 로즈, 머스크</div>
+                    <div class="perfume-mood">순수함, 깨끗한 린넨</div>
+                </div>
+            </div>
+            <div class="perfume-card">
+                <img src="https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&q=80&w=600" alt="Jo Malone" class="perfume-image">
+                <div class="perfume-info">
+                    <div class="perfume-brand">Jo Malone</div>
+                    <div class="perfume-name">우드 세이지 앤 씨 솔트</div>
+                    <div class="perfume-notes">씨 솔트, 세이지, 암브레트 씨드</div>
+                    <div class="perfume-mood">자유로움, 해안가</div>
+                </div>
+            </div>
+            <div class="perfume-card">
+                <img src="https://images.unsplash.com/photo-1615634260167-c8cdede054de?auto=format&fit=crop&q=80&w=600" alt="Diptyque Tam Dao" class="perfume-image">
+                <div class="perfume-info">
+                    <div class="perfume-brand">Diptyque</div>
+                    <div class="perfume-name">탐다오 (Tam Dao)</div>
+                    <div class="perfume-notes">샌달우드, 시더우드, 사이프러스</div>
+                    <div class="perfume-mood">차분함, 깊은 숲속</div>
+                </div>
+            </div>
+            <div class="perfume-card">
+                <img src="https://images.unsplash.com/photo-1608528577891-eb055944f2e7?auto=format&fit=crop&q=80&w=600" alt="Aesop Tacit" class="perfume-image">
+                <div class="perfume-info">
+                    <div class="perfume-brand">Aesop</div>
+                    <div class="perfume-name">테싯 (Tacit)</div>
+                    <div class="perfume-notes">유자, 베티버, 바질</div>
+                    <div class="perfume-mood">생동감, 흙내음</div>
+                </div>
+            </div>
+            <div class="perfume-card">
+                <img src="https://images.unsplash.com/photo-1592914610354-fd354d45e5d0?auto=format&fit=crop&q=80&w=600" alt="Le Labo Santal 33" class="perfume-image">
+                <div class="perfume-info">
+                    <div class="perfume-brand">Le Labo</div>
+                    <div class="perfume-name">상탈 33 (Santal 33)</div>
+                    <div class="perfume-notes">샌달우드, 카다멈, 가죽</div>
+                    <div class="perfume-mood">감각적, 스모키</div>
+                </div>
+            </div>
+            <div class="perfume-card">
+                <img src="https://images.unsplash.com/photo-1587445494246-880058b88dce?auto=format&fit=crop&q=80&w=600" alt="MFK Baccarat Rouge" class="perfume-image">
+                <div class="perfume-info">
+                    <div class="perfume-brand">Maison Francis Kurkdjian</div>
+                    <div class="perfume-name">바카라 루쥬 540</div>
+                    <div class="perfume-notes">자스민, 사프란, 시더우드</div>
+                    <div class="perfume-mood">우아함, 관능적</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="emotion-section">
+            <h2 class="section-title">지금 당신에게 필요한 감정은 무엇인가요?</h2>
+            <div class="emotion-buttons">
+                <button class="emotion-btn" onclick="showPrescription('위로', this)">위로</button>
+                <button class="emotion-btn" onclick="showPrescription('격려', this)">격려</button>
+                <button class="emotion-btn" onclick="showPrescription('용기', this)">용기</button>
+                <button class="emotion-btn" onclick="showPrescription('편안함', this)">편안함</button>
+                <button class="emotion-btn" onclick="showPrescription('용서', this)">용서</button>
+                <button class="emotion-btn" onclick="showPrescription('동기부여', this)">동기부여</button>
+            </div>
+
+            <div id="result-area">
+                <div class="result-title" id="r-title"></div>
+                <div class="result-desc" id="r-desc"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const prescriptions = {
+            '위로': {
+                title: "따뜻한 바닐라와 포근한 화이트 머스크",
+                desc: "지치고 상처받은 마음에는 날카로운 자극이 없는 향이 필요합니다. 체온과 가장 닮은 머스크 향이나, 달콤하고 부드러운 바닐라 향이 마치 누군가 당신을 말없이 꼭 안아주는 듯한 심리적 안정감을 제공합니다."
+            },
+            '격려': {
+                title: "상큼한 스위트 오렌지와 네롤리",
+                desc: "주저앉고 싶을 때, 기분 전환이 절실하다면 햇살을 듬뿍 머금은 시트러스 계열의 향이 제격입니다. 오렌지나 베르가못의 톡톡 튀는 긍정적인 에너지가 당신의 어깨를 가볍게 두드리며 '다시 해볼 수 있어'라고 말을 건넵니다."
+            },
+            '용기': {
+                title: "묵직한 시더우드와 흙내음(베티버)",
+                desc: "중요한 결정을 앞두고 있거나 두려움을 마주해야 할 때, 가볍게 날아가는 향보다는 땅에 단단히 뿌리를 내린 듯한 우디(Woody) 향이 필요합니다. 깊은 나무 기둥과 흙의 향취가 당신의 중심을 단단하게 잡아주고 내면의 강인함을 일깨웁니다."
+            },
+            '편안함': {
+                title: "잔잔한 라벤더와 카모마일, 그리고 그린티",
+                desc: "끊임없는 생각들로 머리가 복잡하다면, 교감신경을 안정시켜 주는 허브 계열이 필요합니다. 라벤더나 맑은 녹차 향은 긴장된 근육을 이완시키고, 아무도 방해하지 않는 아늑한 침실에 누워 있는 듯한 완벽한 휴식을 선사합니다."
+            },
+            '용서': {
+                title: "투명한 아쿠아(물)와 은방울꽃(Muguet)",
+                desc: "타인 혹은 나 자신을 향한 무거운 미움과 죄책감을 씻어내고 싶을 때입니다. 탁하지 않고 투명한 물의 향기나, 맑고 여린 하얀 꽃잎의 향이 응어리진 마음을 부드럽게 헹구어내고 다시 시작할 수 있는 여백을 만들어 줍니다."
+            },
+            '동기부여': {
+                title: "시원한 페퍼민트와 날카로운 로즈마리",
+                desc: "나태해진 자신을 다잡고 뜨거운 열정을 다시 불태우고 싶다면, 감각을 깨우는 스파이시하고 시원한 민트나 허브 향이 좋습니다. 뇌를 번쩍 깨우는 듯한 청량감이 무기력함을 몰아내고 앞으로 나아갈 추진력을 더해줍니다."
+            }
+        };
+
+        function showPrescription(emotion, btnElement) {
+            // 버튼 액티브 상태 변경
+            document.querySelectorAll('.emotion-btn').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+
+            // 데이터 렌더링
+            const resultArea = document.getElementById('result-area');
+            const titleEl = document.getElementById('r-title');
+            const descEl = document.getElementById('r-desc');
+
+            titleEl.innerHTML = `✨ 지금 당신에게 필요한 향 : ${prescriptions[emotion].title}`;
+            descEl.innerHTML = prescriptions[emotion].desc;
+
+            // 애니메이션 재시작을 위한 트릭
+            resultArea.style.display = 'none';
+            setTimeout(() => {
+                resultArea.style.display = 'block';
+            }, 10);
+        }
+    </script>
+</body>
+</html>
